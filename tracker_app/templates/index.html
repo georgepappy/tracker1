@@ -8,7 +8,7 @@
 <body>
   <form action="/">
 
-    <select name="state" method="GET" action="/">
+    <select name="state" onchange="updateSelected(event)" method="GET" action="/">
       <option value="{{states[0]}}" selected>{{states[0]}}</option>
       {% for state in states[1:] %}
         <option value="{{state}}">{{state}}</option>
@@ -17,14 +17,12 @@
 
 
 
-  </form>
-
-<!--   <p>
-    Selected State:
-    {% for p in prediction %}
-      <br>  {{p['name']}}:{{ (100*p['prob']) | round(2) }}% 
-    {% endfor %}
-  </p> -->
+  
+  <script>
+    function updateSelected(event) {
+        document.getElementById('res').innerHTML = 'Your selected score : ' + event.target.value;
+    }
+  </script>
 
 </body>
 
