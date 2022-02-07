@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>US COVID-19 Dashboard</title>
+</head>
+
+<body>
+  <form action="/">
+
+    <select name="state" method="GET" action="/">
+      <option value="{{states[0]}}" selected>{{states[0]}}</option>
+      {% for state in states[1:] %}
+        <option value="{{state}}">{{state}}</option>
+      {% endfor %}
+    </select>
+
+
+
+  
+  <script>
+    let state_select = document.getElementByID('state');
+
+    state = state_select
+  </script>
+
+  <p>
+    Selected State:
+      <br>  {state}
+  </p>
+
+</body>
+
+</html>
