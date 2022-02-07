@@ -3,6 +3,6 @@
 *.csv
 *.py
 *.sh
-#.html
+tracker_app/
 
 
