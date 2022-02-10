@@ -1,7 +1,7 @@
 .DS_Store
 .ipynb_checkpoints
 *.csv
-*.py
+get_covid_data.py
 *.sh
 tracker_app/
 
