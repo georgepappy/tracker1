@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>US COVID-19 Dashboard</title>
+    <title>U.S. COVID-19 Dashboard</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -11,176 +11,48 @@
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
-</head>
-<body>
+  <!-- This stuff is for Altair (the Choropleth map) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-tooltip@0.16.0/build/vega-tooltip.min.js"></script>
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega@4"></script><script src="https://cdn.jsdelivr.net/npm/vega-lite@3.0.0-rc12"></script><script src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script><script src="https://vega.github.io/datalib/datalib.min.js"></script>
 
-<!-- This drop-down menu structure is pattered after this tutorial from Pretty Printed:
+</head>
+
+<body style="background-color:#FAF0E6">
+
+<!-- The drop-down menu structure is pattered after this tutorial from Pretty Printed:
                         https://www.youtube.com/watch?v=I2dJuNwlIH0 -->
 
     <div id="main-container">
-      <h1>US COVID-19 Dashboard</h1>
-
-    <form method="POST">
-        {{ form.csrf_token }}
-        {{ form.state }}
-        {{ form.county }}
-    <input type="submit">
-    </form>
-
-    <br>
-
-    <a href="{{ url_for('index') }}"><button>RESET PAGE</button></a>
+      <h1>U.S. COVID-19 DASHBOARD</h1>
+      Data Provided by Johns Hopkins University & Medicine, Center for Systems Science and Engineering (UPDATED DAILY): <a href="https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data" target="_blank">https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data</a>)
 
     <br><br>
 
-    {% if result %}
-       <!-- <h2>Statewide Result</h2>
-
-       <h4>{{result[0]}}</h4>
-
-       <br><br>
-
-       <h2>Countywide Result</h2>
-
-       <h4>{{result[1]}}</h4>
-
-       <br><br> -->
-
-       <!-- <h2>{{tbl|safe}}</h2> -->
-
-       <!--Table formatting & style ideas based on 
-           https://dev.to/dcodeyt/creating-beautiful-html-tables-with-css-428l  -->
-
-       <table border="5px" bordercolor="#8707B0">
-       <caption style="caption-side:bottom">
-           <h3>(In 2017-18, the overall U.S. Flu Fatality Rate was 0.14%; in 2018-19 it was 0.10%)</h3>
-       </caption>
-          <tr>
-            <td bgcolor=#69F5C9 style="text-align:center">
-                {% if result[0]|length == 1 -%}
-                    <h2>   {{result[0][0]}}</h2>
-                {% else -%}
-                    <h2>   {{result[0][0]}} (Since Pandemic Start)</h2>
-                    <table class="styled-table">
-                        <thead>
-                            <tr>
-                                <th>Total Cases</th>
-                                <th>Total Deaths</th>
-                                <th>Cases per 100k</th>
-                                <th>Fatality Rate (%)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{result[0][1]}}</td>
-                                <td>{{result[0][2]}}</td>
-                                <td>{{result[0][3]}}</td>
-                                <td>{{result[0][4]}}%</td>
-                            </tr>
-                        </tbody>
+    <table>
+        <tr>
+            <td>
+                <form method="POST" action="{{ url_for('index', form_id=1) }}">
+                    {{ form[0].csrf_token }}
+                    <table>
+                        <tr style="text-align:center">
+                            <th><u>Choose State</u></th>
+                            <th><u>Choose County</u></th>
+                        </tr>
+                        <tr>
+                            <td style="vertical-align:center">{{ form[0].state }}</td>
+                            <td style="vertical-align:center; text-align:center">{{ form[0].county }}</td>
+                            <td><input type="submit" class="button1"></td>
+                        </tr>
                     </table>
-                {% endif %}
+                </form>
             </td>
-            <td bgcolor=#69F5C9 style="text-align:center">
-                {% if result[1]|length == 1 -%}
-                    <h2>   {{result[1][0]}}</h2>
-                {% else -%}
-                    <h2>   {{result[1][0]}} (Past 7 Days)</h2>
-                    <table class="styled-table">
-                         <thead>
-                             <tr>
-                                 <th>Total Cases</th>
-                                 <th>Total Deaths</th>
-                                 <th>Cases per 100k</th>
-                                 <th>Fatality Rate (%)</th>
-                             </tr>
-                         </thead>
-                         <tbody>
-                             <tr>
-                                 <td>{{result[1][1]}}</td>
-                                 <td>{{result[1][2]}}</td>
-                                 <td>{{result[1][3]}}</td>
-                                 <td>{{result[1][4]}}%</td>
-                             </tr>
-                         </tbody>
-                     </table>
-                {% endif %}
+            <td>
+                <a href="{{ url_for('index') }}"><button class=button2>Reset Page</button></a>
             </td>
-           </tr>
-        </table>
-
-
-    {% endif %}
-
-    </div>
-
-
-    <div id="second-container">
-        
-    {% if result %}
-       <table border="5px" bordercolor="#8707B0">
-       <caption style="caption-side:bottom">
-           <h3>(In 2017-18, the overall U.S. Flu Fatality Rate was 0.14%; in 2018-19 it was 0.10%)</h3>
-       </caption>
-          <tr>
-            <td bgcolor=#69F5C9 style="text-align:center">
-                {% if result[2]|length == 1 -%}
-                    <h2>   {{result[2][0]}}</h2>
-                {% else -%}
-                    <h2>   {{result[2][0]}} County (Since Pandemic Start)</h2>
-                    <table class="styled-table">
-                        <thead>
-                            <tr>
-                                <th>Total Cases</th>
-                                <th>Total Deaths</th>
-                                <th>Cases per 100k</th>
-                                <th>Fatality Rate (%)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{result[2][2]}}</td>
-                                <td>{{result[2][3]}}</td>
-                                <td>{{result[2][4]}}</td>
-                                <td>{{result[2][5]}}%</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                {% endif %}
-            </td>
-            <td bgcolor=#69F5C9 style="text-align:center">
-                {% if result[3]|length == 1 -%}
-                    <h2>   {{result[3][0]}}</h2>
-                {% else -%}
-                    <h2>   {{result[3][0]}} County (Past 7 Days)</h2>
-                    <table class="styled-table">
-                         <thead>
-                             <tr>
-                                 <th>Total Cases</th>
-                                 <th>Total Deaths</th>
-                                 <th>Cases per 100k</th>
-                                 <th>Fatality Rate (%)</th>
-                             </tr>
-                         </thead>
-                         <tbody>
-                             <tr>
-                                 <td>{{result[3][2]}}</td>
-                                 <td>{{result[3][3]}}</td>
-                                 <td>{{result[3][4]}}</td>
-                                 <td>{{result[3][5]}}%</td>
-                             </tr>
-                         </tbody>
-                     </table>
-                {% endif %}
-            </td>
-           </tr>
-        </table>
-
-
-    {% endif %}
-
-    </div>
-     
+        </tr>
+    </table>
 
     <script>
         var state_select = document.getElementById("state");
@@ -206,9 +78,219 @@
         }
     </script>
 
+    </div>
 
 
+    <table>
+    <tr>
+    <td>
+
+    <div id=second-container>
+
+    {% if result %}
+       <table border="5px" bordercolor="#8707B0">
+       <caption style="caption-side:bottom">
+           <h4>Note: "per 100k" denotes the rate per 100,000 residents (state or county)</h4>
+       </caption>
+          <tr>
+            <td bgcolor=#69F5C9 style="text-align:center">
+                {% if result[0]|length == 1 -%}
+                    <h3>   {{result[0][0]}}</h3>
+                {% else -%}
+                    <h3>   {{result[0][0]}} <br> 
+                    (Since Pandemic Start)</h3>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <!-- <th>Total Cases</th> -->
+                                <th>Cases per 100k</th>
+                                <th>Total Deaths</th>
+                                <th>Deaths per 100k</th>
+                                <th>Death-to-Case Rate (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{result[0][1]}}</td>
+                                <td>{{result[0][2]}}</td>
+                                <td>{{result[0][3]}}</td>
+                                <td>{{result[0][4]}}%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                {% endif %}
+            </td>
+            <td bgcolor=#69F5C9 style="text-align:center">
+                {% if result[1]|length == 1 -%}
+                    <h3>   {{result[1][0]}}</h3>
+                {% else -%}
+                    <h3>   {{result[1][0]}} <br>
+                    (Past 7 Days)</h3>
+                    <table class="styled-table">
+                         <thead>
+                             <tr>
+                                 <!-- <th>Total Cases</th> -->
+                                 <th>Cases per 100k</th>
+                                 <th>Total Deaths</th>
+                                 <th>Deaths per 100k</th>
+                                 <th>Death-to-Case Rate (%)</th>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             <tr>
+                                 <td>{{result[1][1]}}</td>
+                                 <td>{{result[1][2]}}</td>
+                                 <td>{{result[1][3]}}</td>
+                                 <td>{{result[1][4]}}%</td>
+                             </tr>
+                         </tbody>
+                     </table>
+                {% endif %}
+            </td>
+           </tr>
+        </table>
 
 
+    {% endif %}
+
+    </div>
+
+
+    <div id="third-container">
+        
+    {% if result %}
+       <table border="5px" bordercolor="#8707B0">
+       <caption style="caption-side:bottom">
+            <table id="footnote-table">
+                <tr>
+                    <th>U.S. FLU:</th>
+                    <th>2014-15</th>
+                    <th>2015-16</th>
+                    <th>2016-17</th>
+                    <th>2017-18</th>
+                    <th>2018-19</th>
+                </tr>
+                <tr>
+                    <td>Death-to-Case Rate:</td>
+                    <td>0.17%</td>
+                    <td>0.10%</td>
+                    <td>0.13%</td>
+                    <td>0.13%</td>
+                    <td>0.10%</td>
+                </tr>
+            </table>
+
+           <!-- <h5>U.S. FLU (2014-15): &nbsp Death-to-Case Rate: 0.17%<br>
+               U.S. FLU (2015-16): &nbsp Death-to-Case Rate: 0.10%<br>
+               U.S. FLU (2016-17): &nbsp Death-to-Case Rate: 0.13%<br>
+               U.S. FLU (2017-18): &nbsp Death-to-Case Rate: 0.13%<br>
+               U.S. FLU (2018-19): &nbsp Death-to-Case Rate: 0.10%
+           </h5> -->
+           (Flu Data Source: <a href="https://www.cdc.gov/flu/about/burden/index.html" target="_blank">https://www.cdc.gov/flu/about/burden/index.html</a>)
+       </caption>
+          <tr>
+            <td bgcolor=#69F5C9 style="text-align:center">
+                {% if result[2]|length == 1 -%}
+                    <h3>   {{result[2][0]}}</h3>
+                {% else -%}
+                    <h3>   {{result[2][0]}} County <br>
+                    (Since Pandemic Start)</h3>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Cases per 100k</th>
+                                <th>Total Deaths</th>
+                                <th>Deaths per 100k</th>
+                                <th>Death-to-Case Rate (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{result[2][2]}}</td>
+                                <td>{{result[2][3]}}</td>
+                                <td>{{result[2][4]}}</td>
+                                <td>{{result[2][5]}}%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                {% endif %}
+            </td>
+            <td bgcolor=#69F5C9 style="text-align:center">
+                {% if result[3]|length == 1 -%}
+                    <h3>   {{result[3][0]}}</h3>
+                {% else -%}
+                    <h3>   {{result[3][0]}} County <br>
+                    (Past 7 Days)</h3>
+                    <table class="styled-table">
+                         <thead>
+                             <tr>
+                                 <th>Cases per 100k</th>
+                                <th>Total Deaths</th>
+                                <th>Deaths per 100k</th>
+                                <th>Death-to-Case Rate (%)</th>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             <tr>
+                                 <td>{{result[3][2]}}</td>
+                                 <td>{{result[3][3]}}</td>
+                                 <td>{{result[3][4]}}</td>
+                                 <td>{{result[3][5]}}%</td>
+                             </tr>
+                         </tbody>
+                     </table>
+                {% endif %}
+            </td>
+           </tr>
+        </table>
+
+
+    {% endif %}
+
+    </div>
+    </td>
+
+    <div id="fourth-container">
+    
+    <td>
+    {% if result %}
+        <!-- <h1> Map Will Go Here! </h1> -->
+        {% if result[4] %}
+
+        <div id="vis"></div>
+        <script type="text/javascript">
+          var g = JSON.parse({{ result[4]|tojson }});
+          vegaEmbed('#vis', g).then(function(result) {
+            // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+          }).catch(console.error);
+        </script>
+        {% endif %}
+
+    {% endif %}
+    </div>
+
+    <div id="fifth-container">
+    {% if result %}
+        <form method="POST" action="{{ url_for('index', form_id=2) }}">
+            {{ form[1].csrf_token }}
+            <table>
+                <tr style="text-align:center">
+                    <th><u>Time Window for Map</u></th>
+                    <th><u>Reported Statistic</u></th>
+                </tr>
+                <tr>
+                    <td style="vertical-align:top">{{ form[1].since_start }}</td>
+                    <td style="vertical-align:top">{{ form[1].stat }}</td>
+                    <td><input type="submit" class="button3"></td>
+                </tr>
+            </table>
+        </form>
+    {% endif %}
+    </div>
+    </td>
+    
+    </tr>
+    </table>
+     
 </body>
 </html>

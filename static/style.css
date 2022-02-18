@@ -1,36 +1,115 @@
+html * {
+  font-family: Verdana, Arial, Geneva, Helvetica, sans-serif;
+}
+
 #main-container {
-  padding: 60px;
+    font-family: Verdana, Arial, Geneva, Helvetica, sans-serif;
+    padding-top: 0px;
+    padding-right: 20px;
+    padding-bottom: 0px;
+    padding-left: 20px;
+}
+
+.button1 {
+  background-color: mediumslateblue;
+  width: 125px;
+  font-size: 16px;
+  padding: 6px;
+  border-radius: 5px;
+  border: 2px solid black;
+  color: white;
+  text-align: center;
+  margin-top: 0px;
+  margin-bottom: 4px;
+  margin-left:  20px;
+}
+
+.button2 {
+  background-color: seagreen;
+  width: 125px;
+  font-size: 16px;
+  padding: 6px;
+  border-radius: 5px;
+  border: 2px solid black;
+  color: white;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 0px;
+  margin-left:  20px;
+}
+
+.button3 {
+  background-color: mediumslateblue;
+  width: 125px;
+  font-size: 16px;
+  padding: 6px;
+  border-radius: 5px;
+  border: 2px solid black;
+  color: white;
+  text-align: center;
+  margin-top: 0px;
+  margin-bottom: 30px;
+  margin-left:  20px;
 }
 
 #second-container {
-  padding: 60px;
+    font-family: Verdana, Arial, Geneva, Helvetica, sans-serif;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 20px;
 }
 
+#third-container {
+    font-family: Verdana, Arial, Geneva, Helvetica, sans-serif;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 20px;
+}
+
+#fourth-container {
+    font-family: Verdana, Arial, Geneva, Helvetica, sans-serif;
+    padding-top: 0px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    padding-left: 0px;
+}
+
+#fifth-container {
+    font-family: Verdana, Arial, Geneva, Helvetica, sans-serif;
+    padding-top: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    padding-left: 200px;
+    text-align: left;
+}
 
 .styled-table {
     border-collapse: collapse;
-    margin: 25px 0;
-    font-size: 0.9em;
-    font-family: sans-serif;
-    min-width: 400px;
+    margin: 10px 0;
+    font-size: 0.86em;
+    font-family: Verdana, Arial, Geneva, Helvetica, sans-serif;
+    min-width: 200px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
 }
 
 .styled-table thead tr {
     background-color: #244CA3;
     color: #ffffff;
-    text-align: left;
+    text-align: center;
 }
 
 .styled-table th,
 .styled-table td {
-  font-weight: bold;
-    padding: 12px 15px;
+    font-weight: bold;
+    padding: 12px;
+    text-align: center;
 }
 
 .styled-table tbody tr {
     border-bottom: 1px solid #dddddd;
-    background-color: #F4F0E6;
+    background-color: #FFFFE0;
 }
 
 .styled-table tbody tr:nth-of-type(even) {
@@ -39,4 +118,25 @@
 
 .styled-table tbody tr:last-of-type {
     border-bottom: 2px solid #009879;
+}
+
+#footnote-table {
+    margin: 10px;
+    border-collapse: collapse;
+    border: 2px solid;
+    text-align:  center;
+    font-family: Verdana, Arial, Geneva, Helvetica, sans-serif;
+}
+
+#footnote-table th, 
+#footnote-table td {
+    padding: 3px;
+    border-collapse: collapse;
+    border: 2px solid;
+    text-align:  center;
+    min-width: 100px;
+}
+
+ul {
+  list-style: none;
 }

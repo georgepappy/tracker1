@@ -4,3 +4,7 @@ flask_wtf
 wtforms
 gunicorn
 numpy
+pandas
+altair
+geopandas
+json
