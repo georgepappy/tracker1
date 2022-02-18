@@ -10,7 +10,8 @@ from wtforms import SelectField, RadioField
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///covid.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../covid.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../../covid.db'
 app.config['SECRET_KEY'] = 'secret'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -255,6 +256,13 @@ def county(state):
         countyArray.append(countyObj)
 
     return jsonify({'counties' : countyArray})
+
+
+
+@app.after_request
+def add_header(r):
+    r.headers["Cache-Control"]  = "no-store max-age=0"
+    return r
 
 
 
