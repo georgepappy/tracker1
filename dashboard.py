@@ -10,8 +10,7 @@ from wtforms import SelectField, RadioField
 
 app = Flask(__name__)
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../covid.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../../covid.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///covid.db'
 app.config['SECRET_KEY'] = 'secret'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
