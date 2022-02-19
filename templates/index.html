@@ -103,6 +103,30 @@
         }
     </script>
 
+    <script>
+        var state_select = document.getElementById("state");
+        var county_select = document.getElementById("county");
+
+        window.onload = function()  {
+             
+            state = state_select.value;
+            
+            fetch('/county/' + state).then(function(response) {
+
+                response.json().then(function(data) {
+                    var optionHTML = '';
+
+                    for (var county of data.counties) {
+                        optionHTML += '<option value="' + county.id + '">' + county.name + '</option>';
+                    }
+
+                    county_select.innerHTML = optionHTML;
+                })
+                
+            });
+        }
+    </script>
+
     <!-- </div> -->
 
     <table>
@@ -117,7 +141,7 @@
            <br><strong>Note: "per 100k" denotes the rate per 100,000 residents (state or county)</strong><br><br>
        </caption>
           <tr>
-            <td bgcolor=#69F5C9 style="text-align:center">
+            <td bgcolor=#69F5C9 style="text-align:center; min-width:323px">
                 {% if result[0]|length == 1 -%}
                     <h3>   {{result[0][0]}}</h3>
                 {% else -%}
@@ -144,7 +168,7 @@
                     </table>
                 {% endif %}
             </td>
-            <td bgcolor=#69F5C9 style="text-align:center">
+            <td bgcolor=#69F5C9 style="text-align:center; min-width:323px">
                 {% if result[1]|length == 1 -%}
                     <h3>   {{result[1][0]}}</h3>
                 {% else -%}

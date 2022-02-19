@@ -10,7 +10,7 @@ from wtforms import SelectField, RadioField
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///covid.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../covid.db'
 app.config['SECRET_KEY'] = 'secret'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -53,8 +53,7 @@ class UserForm(FlaskForm):
                         default=''
                        ) 
     county = SelectField('county', 
-                         choices=[],
-                         default=('Choose State')
+                         choices=[]
                         )
     since_start = RadioField('Reporting Window', 
                              choices = [('Since Pandemic Start', 'Since Pandemic Start'),
@@ -79,7 +78,6 @@ def index():
     if request.method == 'GET':
         # Clear state menu
         form.state.data = '0'
-        form.county.choices.append('(Choose State)')
 
         return render_template('index.html', form=form)
 
@@ -92,7 +90,7 @@ def index():
         counties_list = [(n, val[0]) for n, val in enumerate(counties)]
         if len(counties_list) == 0 or form.county.data == 'None Available' \
                                    or form.county.data == 'Choose State':
-            desired_county = 'None Available'
+            desired_county = '(Choose State)'
         else:
             desired_county = counties_list[int(form.county.data)][1] 
 
@@ -100,7 +98,7 @@ def index():
                    .filter_by(Province_State=desired_state) \
                    .filter_by(Admin2=desired_county).first()
         if county == None:
-            county = 'None Available'
+            county = '(Choose State)'
         else: 
             county = county[0]
 
@@ -193,10 +191,11 @@ def index():
         else:
             since_start_string = form.since_start.data
             since_start = True if since_start_string == 'Since Pandemic Start' else False
-            stat = form.stat.data    
-        gen_map(since_start=since_start, stat=stat)
-        with open('map_chart.json') as f:
-            map_data = json.dumps(json.load(f))
+            stat = form.stat.data
+        map_data = gen_map(since_start=since_start, stat=stat)    
+#        gen_map(since_start=since_start, stat=stat)
+#        with open('map_chart.json') as f:
+#            map_data = json.dumps(json.load(f))
 
         result = [results_1, results_2, results_3, results_4, map_data]
 
@@ -204,12 +203,8 @@ def index():
         form.since_start.data = since_start_string
         form.stat.data = stat
 
-        # Set Choose State Menu back to blank
-#        form.state.data = '0'
-
         return render_template("index.html", form = form, result=result)
       
-
 
 
 @app.route('/county/<state>')
@@ -220,12 +215,12 @@ def county(state):
 
     counties_list = [(n, val[0]) for n, val in enumerate(counties)]
     if len(counties_list) == 0:
-        counties_list.append('None Available')
+        counties_list.append('(Choose State)')
 
     countyArray = []
     for county in counties_list:
         countyObj = {}
-        if county != 'None Available':
+        if county != '(Choose State)':
             countyObj['id'] = county[0]
             countyObj['name'] = county[1]
         else:
@@ -361,9 +356,9 @@ def gen_map(since_start=False, stat='Deaths per 100k'):
                     )
                 )
 
-    map_chart.save('map_chart.json')
+#    map_chart.save('map_chart.json')
 
-    return None
+    return map_chart.to_json()
 
 
 
