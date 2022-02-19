@@ -47,16 +47,15 @@ states = ['','Alaska','Alabama','Arkansas','Arizona','California','Colorado','Co
 state_choices = [(n, val) for n, val in enumerate(states)]
 
 
-class TableForm(FlaskForm):
+class UserForm(FlaskForm):
     state = SelectField('state', 
                         choices=state_choices, 
-                        default='California'
+                        default=''
                        ) 
     county = SelectField('county', 
-                         choices=[]
+                         choices=[],
+                         default=('Choose State')
                         )
-
-class MapForm(FlaskForm):
     since_start = RadioField('Reporting Window', 
                              choices = [('Since Pandemic Start', 'Since Pandemic Start'),
                                         ('Past 7 Days', 'Past 7 Days')]
@@ -68,41 +67,34 @@ class MapForm(FlaskForm):
                                  ('Death-to-Case Rate (%)', 'Death-to-Case Rate (%)')]
                      )
 
-# Global variable holding latest values passed to html page
-#   (Need this because there are 2 independent forms submitting to the same route, '/')
-result = []
-
-# Global variables holding map radio button settings on html page
-#   (Need these so radio buttons remain consistent w/ map configuration when tables are updated)
-since_start_string = 'Since Pandemic Start' # Initial default value
-stat = 'Death-to-Case Rate (%)' # Initial default value
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    global result
-    global since_start_string
-    global stat
-    table_form = TableForm()
-    map_form = MapForm()
+    print(request.method)
+    result = []
 
-    # Set Choose County menu to default for No State Selected
-    table_form.county.choices.append('(Choose State)')
+    form = UserForm()
 
-    form_id = request.args.get('form_id', 1, type=int)
+    if request.method == 'GET':
+        # Clear state menu
+        form.state.data = '0'
+        form.county.choices.append('(Choose State)')
+
+        return render_template('index.html', form=form)
 
 
-    ## POST 1: User submitting state and county selections for table display (form_id == 1)
-    if (request.method == 'POST') and (form_id == 1):
-        desired_state = state_choices[int(table_form.state.data)][1]
+    if request.method == 'POST':
+        desired_state = state_choices[int(form.state.data)][1]
 
         counties = db.session.query(county_data.Admin2) \
                          .filter_by(Province_State=desired_state).distinct()
         counties_list = [(n, val[0]) for n, val in enumerate(counties)]
-        if len(counties_list) == 0 or table_form.county.data == 'None Available':
+        if len(counties_list) == 0 or form.county.data == 'None Available' \
+                                   or form.county.data == 'Choose State':
             desired_county = 'None Available'
         else:
-            desired_county = counties_list[int(table_form.county.data)][1] 
+            desired_county = counties_list[int(form.county.data)][1] 
 
         county = db.session.query(county_data.Admin2) \
                    .filter_by(Province_State=desired_state) \
@@ -191,45 +183,32 @@ def index():
                          '{:,}'.format(round(deaths_per_100k_7_day, 1)),
                          '{:,}'.format(round(case_fatality_ratio_7_day, 2))]
 
-        if len(result) == 5:
-            # Retrieve user's previously-selected choroplth map configuration
-            map_data = result[4]
+
+        # Generate & get choropleth map
+        if form.since_start.data == None:
+            # Default values (if none found in form)
+            since_start_string = 'Since Pandemic Start'
+            since_start=True
+            stat = 'Death-to-Case Rate (%)'
         else:
-            # Make & get default choropleth map (no user selected map cofig yet)
-            gen_map(since_start=True, stat='Death-to-Case Rate (%)')
-            with open('map_chart.json') as f:
-                map_data = json.dumps(json.load(f))
-
-        result = [results_1, results_2, results_3, results_4, map_data]
-
-        # Update radio button defaults to remain consistent with current map configuration
-        map_form.since_start.data = since_start_string
-        map_form.stat.data = stat
-
-        # Set Choose State Menu back to blank
-        table_form.state.data = '0'
-
-        return render_template("index.html", form = [table_form, map_form], result=result)
-
-    ## POST 2: User submitting radio button selections for map display (i.e. form_id == 2)
-    if (request.method == 'POST') and (form_id == 2):
-
-        # Retain the existing state and county data
-        result = result[0:4]
-
-        # Get the new requested choropleth map
-        since_start_string = map_form.since_start.data
-        since_start = True if since_start_string == 'Since Pandemic Start' else False
-        stat = map_form.stat.data
+            since_start_string = form.since_start.data
+            since_start = True if since_start_string == 'Since Pandemic Start' else False
+            stat = form.stat.data    
         gen_map(since_start=since_start, stat=stat)
         with open('map_chart.json') as f:
             map_data = json.dumps(json.load(f))
 
-        result.append(map_data)
+        result = [results_1, results_2, results_3, results_4, map_data]
 
-        return render_template("index.html", form = [table_form, map_form], result=result)
+        # Update radio button defaults to remain consistent with current map configuration
+        form.since_start.data = since_start_string
+        form.stat.data = stat
 
-    return render_template('index.html', form=[table_form, map_form])      
+        # Set Choose State Menu back to blank
+#        form.state.data = '0'
+
+        return render_template("index.html", form = form, result=result)
+      
 
 
 

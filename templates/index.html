@@ -25,31 +25,56 @@
                         https://www.youtube.com/watch?v=I2dJuNwlIH0 -->
 
     <div id="main-container">
-      <h1>U.S. COVID-19 DASHBOARD</h1>
-      Data Provided by Johns Hopkins University & Medicine, Center for Systems Science and Engineering (UPDATED DAILY): <a href="https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data" target="_blank">https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data</a>)
 
-    <br><br>
+    <table id="header-table">
+        <tr>
+            <td style="min-width:600px"><h1>U.S. COVID-19 DASHBOARD</h1></td>
+            <td><strong>Data Provided by Johns Hopkins University & School of Medicine, Center for Systems Science and Engineering</strong><br>(UPDATED DAILY): <a href="https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data" target="_blank">https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data</a>)</td>
+        </tr>
+    </table>
 
-    <table>
+    <table id="header-table">
         <tr>
             <td>
-                <form method="POST" action="{{ url_for('index', form_id=1) }}">
-                    {{ form[0].csrf_token }}
+                <a href="{{ url_for('index') }}" ><button class=button2>Reset Page</button></a>
+            </td>
+            <td>&emsp; &emsp; &emsp;</td>
+            <td>
+            <form method="POST" action="{{ url_for('index') }}">
+                    {{ form.csrf_token }}
                     <table>
                         <tr style="text-align:center">
                             <th><u>Choose State</u></th>
                             <th><u>Choose County</u></th>
                         </tr>
                         <tr>
-                            <td style="vertical-align:center">{{ form[0].state }}</td>
-                            <td style="vertical-align:center; text-align:center">{{ form[0].county }}</td>
+                            <td style="vertical-align:center">{{ form.state }}</td>
+                            <td style="vertical-align:center; text-align:center">{{ form.county }}</td>
+                            <td>&emsp; &emsp; &emsp;</td>
+                            <td>&emsp; &emsp;</td>
                             <td><input type="submit" class="button1"></td>
                         </tr>
                     </table>
-                </form>
             </td>
+            
             <td>
-                <a href="{{ url_for('index') }}"><button class=button2>Reset Page</button></a>
+                {% if result %}
+                <table>
+                    <tr style="text-align:center">
+                        <th>&emsp; &emsp; &emsp;</th>
+                        <th>&emsp; &emsp;</th>
+                        <th><br><u>Time Window for Map</u></th>
+                        <th><br><u>Reported Map Statistic</u></th>
+                    </tr>
+                    <tr>
+                        <td>&emsp; &emsp; &emsp;</td>
+                        <td>&emsp; &emsp;</td>
+                        <td style="vertical-align:top">{{ form.since_start }}</td>
+                        <td style="vertical-align:top">{{ form.stat }}</td>
+                    </tr>
+                </table>
+                {% endif %}
+            </form>
             </td>
         </tr>
     </table>
@@ -78,19 +103,18 @@
         }
     </script>
 
-    </div>
-
+    <!-- </div> -->
 
     <table>
     <tr>
     <td>
 
-    <div id=second-container>
+    <!-- <div id=second-container> -->
 
     {% if result %}
        <table border="5px" bordercolor="#8707B0">
        <caption style="caption-side:bottom">
-           <h4>Note: "per 100k" denotes the rate per 100,000 residents (state or county)</h4>
+           <br><strong>Note: "per 100k" denotes the rate per 100,000 residents (state or county)</strong><br><br>
        </caption>
           <tr>
             <td bgcolor=#69F5C9 style="text-align:center">
@@ -153,10 +177,10 @@
 
     {% endif %}
 
-    </div>
+    <!-- </div> -->
 
 
-    <div id="third-container">
+    <!-- <div id="third-container"> -->
         
     {% if result %}
        <table border="5px" bordercolor="#8707B0">
@@ -180,13 +204,7 @@
                 </tr>
             </table>
 
-           <!-- <h5>U.S. FLU (2014-15): &nbsp Death-to-Case Rate: 0.17%<br>
-               U.S. FLU (2015-16): &nbsp Death-to-Case Rate: 0.10%<br>
-               U.S. FLU (2016-17): &nbsp Death-to-Case Rate: 0.13%<br>
-               U.S. FLU (2017-18): &nbsp Death-to-Case Rate: 0.13%<br>
-               U.S. FLU (2018-19): &nbsp Death-to-Case Rate: 0.10%
-           </h5> -->
-           (Flu Data Source: <a href="https://www.cdc.gov/flu/about/burden/index.html" target="_blank">https://www.cdc.gov/flu/about/burden/index.html</a>)
+           (<strong>Flu Data Source:</strong> <a href="https://www.cdc.gov/flu/about/burden/index.html" target="_blank">https://www.cdc.gov/flu/about/burden/index.html</a>)
        </caption>
           <tr>
             <td bgcolor=#69F5C9 style="text-align:center">
@@ -247,14 +265,13 @@
 
     {% endif %}
 
-    </div>
+    <!-- </div> -->
     </td>
 
-    <div id="fourth-container">
+    <!-- <div id="fourth-container"> -->
     
     <td>
     {% if result %}
-        <!-- <h1> Map Will Go Here! </h1> -->
         {% if result[4] %}
 
         <div id="vis"></div>
@@ -267,30 +284,14 @@
         {% endif %}
 
     {% endif %}
-    </div>
+    <!-- </div> -->
 
-    <div id="fifth-container">
-    {% if result %}
-        <form method="POST" action="{{ url_for('index', form_id=2) }}">
-            {{ form[1].csrf_token }}
-            <table>
-                <tr style="text-align:center">
-                    <th><u>Time Window for Map</u></th>
-                    <th><u>Reported Statistic</u></th>
-                </tr>
-                <tr>
-                    <td style="vertical-align:top">{{ form[1].since_start }}</td>
-                    <td style="vertical-align:top">{{ form[1].stat }}</td>
-                    <td><input type="submit" class="button3"></td>
-                </tr>
-            </table>
-        </form>
-    {% endif %}
-    </div>
     </td>
     
     </tr>
     </table>
+
+    </div>
      
 </body>
 </html>

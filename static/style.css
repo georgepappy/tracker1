@@ -1,13 +1,29 @@
 html * {
-  font-family: Verdana, Arial, Geneva, Helvetica, sans-serif;
-}
+    font-family: Verdana, Arial, Geneva, Helvetica, sans-serif;
+} 
 
 #main-container {
     font-family: Verdana, Arial, Geneva, Helvetica, sans-serif;
     padding-top: 0px;
-    padding-right: 20px;
+    padding-right: 0px;
     padding-bottom: 0px;
     padding-left: 20px;
+}
+
+#header-table {
+    font-family: Verdana, Arial, Geneva, Helvetica, sans-serif;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-top: 0px;
+    padding-bottom:  0px;
+}
+
+#input-table {
+    font-family: Verdana, Arial, Geneva, Helvetica, sans-serif;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-top: 0px;
+    padding-bottom:  0px;
 }
 
 .button1 {
@@ -35,20 +51,6 @@ html * {
   text-align: center;
   margin-top: 20px;
   margin-bottom: 0px;
-  margin-left:  20px;
-}
-
-.button3 {
-  background-color: mediumslateblue;
-  width: 125px;
-  font-size: 16px;
-  padding: 6px;
-  border-radius: 5px;
-  border: 2px solid black;
-  color: white;
-  text-align: center;
-  margin-top: 0px;
-  margin-bottom: 30px;
   margin-left:  20px;
 }
 
