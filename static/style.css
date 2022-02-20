@@ -3,7 +3,6 @@ html * {
 } 
 
 #main-container {
-    font-family: Verdana, Arial, Geneva, Helvetica, sans-serif;
     padding-top: 0px;
     padding-right: 0px;
     padding-bottom: 0px;
@@ -11,7 +10,6 @@ html * {
 }
 
 #header-table {
-    font-family: Verdana, Arial, Geneva, Helvetica, sans-serif;
     margin-top: 0px;
     margin-bottom: 0px;
     padding-top: 0px;
@@ -19,7 +17,6 @@ html * {
 }
 
 #input-table {
-    font-family: Verdana, Arial, Geneva, Helvetica, sans-serif;
     margin-top: 0px;
     margin-bottom: 0px;
     padding-top: 0px;
@@ -52,39 +49,6 @@ html * {
   margin-top: 20px;
   margin-bottom: 0px;
   margin-left:  20px;
-}
-
-#second-container {
-    font-family: Verdana, Arial, Geneva, Helvetica, sans-serif;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 20px;
-}
-
-#third-container {
-    font-family: Verdana, Arial, Geneva, Helvetica, sans-serif;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 20px;
-}
-
-#fourth-container {
-    font-family: Verdana, Arial, Geneva, Helvetica, sans-serif;
-    padding-top: 0px;
-    padding-right: 20px;
-    padding-bottom: 20px;
-    padding-left: 0px;
-}
-
-#fifth-container {
-    font-family: Verdana, Arial, Geneva, Helvetica, sans-serif;
-    padding-top: 20px;
-    padding-right: 20px;
-    padding-bottom: 20px;
-    padding-left: 200px;
-    text-align: left;
 }
 
 .styled-table {
@@ -127,7 +91,7 @@ html * {
     border-collapse: collapse;
     border: 2px solid;
     text-align:  center;
-    font-family: Verdana, Arial, Geneva, Helvetica, sans-serif;
+
 }
 
 #footnote-table th, 

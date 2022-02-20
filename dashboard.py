@@ -10,7 +10,7 @@ from wtforms import SelectField, RadioField
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///covid.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../covid.db'
 app.config['SECRET_KEY'] = 'secret'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -182,7 +182,7 @@ def index():
                          '{:,}'.format(round(case_fatality_ratio_7_day, 2))]
 
 
-        # Generate & get choropleth map
+        # Generate choropleth map
         if form.since_start.data == None:
             # Default values (if none found in form)
             since_start_string = 'Since Pandemic Start'
@@ -193,9 +193,6 @@ def index():
             since_start = True if since_start_string == 'Since Pandemic Start' else False
             stat = form.stat.data
         map_data = gen_map(since_start=since_start, stat=stat)    
-#        gen_map(since_start=since_start, stat=stat)
-#        with open('map_chart.json') as f:
-#            map_data = json.dumps(json.load(f))
 
         result = [results_1, results_2, results_3, results_4, map_data]
 
@@ -355,8 +352,6 @@ def gen_map(since_start=False, stat='Deaths per 100k'):
                         anchor="middle"
                     )
                 )
-
-#    map_chart.save('map_chart.json')
 
     return map_chart.to_json()
 

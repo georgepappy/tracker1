@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>U.S. COVID-19 Dashboard</title>
+
+  <title>U.S. COVID-19 Dashboard</title>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -15,13 +17,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-tooltip@0.16.0/build/vega-tooltip.min.js"></script>
   <script src="https://d3js.org/d3.v3.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega@4"></script><script src="https://cdn.jsdelivr.net/npm/vega-lite@3.0.0-rc12"></script><script src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script><script src="https://vega.github.io/datalib/datalib.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega@4"></script><script src="https://cdn.jsdelivr.net/npm/vega-lite@3.0.0-rc12"></script><script src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
+  <script src="https://vega.github.io/datalib/datalib.min.js"></script>
 
 </head>
 
 <body style="background-color:#FAF0E6">
 
-<!-- The drop-down menu structure is pattered after this tutorial from Pretty Printed:
+<!-- The drop-down menu structure is patterned after this tutorial from Pretty Printed:
                         https://www.youtube.com/watch?v=I2dJuNwlIH0 -->
 
     <div id="main-container">
@@ -50,8 +53,8 @@
                         <tr>
                             <td style="vertical-align:center">{{ form.state }}</td>
                             <td style="vertical-align:center; text-align:center">{{ form.county }}</td>
-                            <td>&emsp; &emsp; &emsp;</td>
-                            <td>&emsp; &emsp;</td>
+                            <td>&emsp; &emsp; &emsp; &emsp;</td>
+                            <td>&emsp; &emsp; &emsp; &emsp;</td>
                             <td><input type="submit" class="button1"></td>
                         </tr>
                     </table>
@@ -79,6 +82,7 @@
         </tr>
     </table>
 
+    <!-- This script dynamically fills in the County menu when a state is chosen -->
     <script>
         var state_select = document.getElementById("state");
         var county_select = document.getElementById("county");
@@ -103,6 +107,7 @@
         }
     </script>
 
+    <!-- This script reloads previously chosen state & county list after user hits submit -->
     <script>
         var state_select = document.getElementById("state");
         var county_select = document.getElementById("county");
@@ -127,13 +132,12 @@
         }
     </script>
 
-    <!-- </div> -->
 
+
+    <!-- Results are all displayed in the tables/subtables below -->
     <table>
     <tr>
-    <td>
-
-    <!-- <div id=second-container> -->
+    <td><div style="width: 880px">
 
     {% if result %}
        <table border="5px" bordercolor="#8707B0">
@@ -142,6 +146,8 @@
        </caption>
           <tr>
             <td bgcolor=#69F5C9 style="text-align:center; min-width:323px">
+            <!-- <td bgcolor=#69F5C9 style="text-align:center; width:450px; overflow:hidden;"> -->
+            <!-- <td bgcolor=#69F5C9 style="text-align:center"> -->
                 {% if result[0]|length == 1 -%}
                     <h3>   {{result[0][0]}}</h3>
                 {% else -%}
@@ -168,7 +174,9 @@
                     </table>
                 {% endif %}
             </td>
+            <!-- <td bgcolor=#69F5C9 style="text-align:center; width:450px; overflow:hidden;"> -->
             <td bgcolor=#69F5C9 style="text-align:center; min-width:323px">
+            <!-- <td bgcolor=#69F5C9 style="text-align:center"> -->
                 {% if result[1]|length == 1 -%}
                     <h3>   {{result[1][0]}}</h3>
                 {% else -%}
@@ -200,11 +208,6 @@
 
 
     {% endif %}
-
-    <!-- </div> -->
-
-
-    <!-- <div id="third-container"> -->
         
     {% if result %}
        <table border="5px" bordercolor="#8707B0">
@@ -289,16 +292,14 @@
 
     {% endif %}
 
-    <!-- </div> -->
     </td>
 
-    <!-- <div id="fourth-container"> -->
-    
+    <!-- Map Goes Here (in 2nd column of Results Table) -->
     <td>
     {% if result %}
         {% if result[4] %}
 
-        <div id="vis"></div>
+        <div id="vis" style="margin-top: 30px"></div>
         <script type="text/javascript">
           var g = JSON.parse({{ result[4]|tojson }});
           vegaEmbed('#vis', g).then(function(result) {
@@ -308,7 +309,7 @@
         {% endif %}
 
     {% endif %}
-    <!-- </div> -->
+
 
     </td>
     
