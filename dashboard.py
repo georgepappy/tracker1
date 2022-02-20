@@ -130,14 +130,28 @@ def index():
             else:
                 # Divide by zero case
                 case_fatality_ratio_7_day = 0
-            
+
+            # Error checks
+            bad_data = False
+            if (confirmed_7_day < 0) or (deaths_7_day < 0):
+                # Possible Reporting Error (in Johns Hopkins daily data)
+                bad_data = True
 
             # Last-7-day state-level results
-            results_2 = [result_1.Province_State,
-                         '{:,}'.format(round(indicent_rate_7_day, 1)),
-                         '{:,}'.format(deaths_7_day),
-                         '{:,}'.format(round(deaths_per_100k_7_day, 1)),
-                         '{:,}'.format(round(case_fatality_ratio_7_day, 2))]
+#            if 'BAD DATA' in [indicent_rate_7_day, deaths_7_day, 
+#                              deaths_per_100k_7_day, case_fatality_ratio_7_day]:
+            if bad_data:
+                results_2 = ['BAD DATA (Daily Reporting Error)',
+                             '-',
+                             '-',
+                             '-',
+                             '']
+            else: 
+                results_2 = [result_1.Province_State,
+                             '{:,}'.format(round(indicent_rate_7_day, 1)),
+                             '{:,}'.format(deaths_7_day),
+                             '{:,}'.format(round(deaths_per_100k_7_day, 1)),
+                             '{:,}'.format(round(case_fatality_ratio_7_day, 2))]
         
         result_3 = county_data.query.filter_by(Province_State=desired_state) \
                                     .filter_by(Admin2=county) \
@@ -173,13 +187,29 @@ def index():
                 # Divide by zero case
                 case_fatality_ratio_7_day = 0
 
+            # Error checks
+            bad_data = False
+            if (confirmed_7_day < 0) or (deaths_7_day < 0):
+                # Possible Reporting Error (in Johns Hopkins daily data)
+                bad_data = True   
+
             # Last-7-day county-level results
-            results_4 = [result_3.Admin2,
-                         result_3.Province_State,
-                         '{:,}'.format(round(indicent_rate_7_day, 1)),
-                         '{:,}'.format(deaths_7_day),
-                         '{:,}'.format(round(deaths_per_100k_7_day, 1)),
-                         '{:,}'.format(round(case_fatality_ratio_7_day, 2))]
+#            if 'BAD DATA' in [indicent_rate_7_day, deaths_7_day, 
+#                              deaths_per_100k_7_day, case_fatality_ratio_7_day]:
+            if bad_data:
+                results_4 = ['BAD DATA (Daily Reporting Error)',
+                             result_3.Province_State,
+                             '-',
+                             '-',
+                             '-',
+                             '']
+            else: 
+                results_4 = [result_3.Admin2,
+                             result_3.Province_State,
+                             '{:,}'.format(round(indicent_rate_7_day, 1)),
+                             '{:,}'.format(deaths_7_day),
+                             '{:,}'.format(round(deaths_per_100k_7_day, 1)),
+                             '{:,}'.format(round(case_fatality_ratio_7_day, 2))]
 
 
         # Generate choropleth map
@@ -268,19 +298,29 @@ def gen_map(since_start=False, stat='Deaths per 100k'):
             # Compute the last-7-day data for state-level results
             confirmed_7_day = row_1.Confirmed - row_2.Confirmed
             deaths_7_day = row_1.Deaths - row_2.Deaths
-            deaths_per_100k_7_day = 100000 * deaths_7_day / pop2021,
+            deaths_per_100k_7_day = 100000 * deaths_7_day / pop2021
             incident_rate_7_day = 100000 * confirmed_7_day / pop2021
-            if confirmed_7_day > 0:
+            if confirmed_7_day != 0:
                 case_fatality_ratio_7_day = 100 * deaths_7_day / confirmed_7_day
             else:
                 # Divide by zero case
                 case_fatality_ratio_7_day = 0
-            results.append((row_1.Province_State,
-                            deaths_per_100k_7_day,
-                            deaths_7_day,
-                            incident_rate_7_day,
-                            case_fatality_ratio_7_day,
-                            pop2021))
+
+            # Error checks
+            bad_data = False
+            if (confirmed_7_day < 0) or (deaths_7_day < 0):
+                # Possible Reporting Error (in Johns Hopkins daily data)
+                bad_data = True            
+
+            # Last-7-day state-level results
+            if not bad_data:
+                # Do not include any state with bad data in the map
+                results.append((row_1.Province_State,
+                                deaths_per_100k_7_day,
+                                deaths_7_day,
+                                incident_rate_7_day,
+                                case_fatality_ratio_7_day,
+                                pop2021))
 
     df = pd.DataFrame(results,
                       columns=['Province_State', 'Deaths_per_100k', 'Deaths', 
