@@ -4,5 +4,6 @@
 get_covid_data.py
 *.sh
 tracker_app/
+temp/
 
 
