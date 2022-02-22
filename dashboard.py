@@ -262,6 +262,8 @@ def add_header(r):
 
 
 
+# The following work is based on:
+#  https://medium.com/dataexplorations/creating-choropleth-maps-in-altair-eeb7085779a1
 def gen_map(since_start=False, stat='Deaths per 100k'):
     """
         since_start (boolean) : True for 'Since Pandemic Start'
