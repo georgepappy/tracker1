@@ -264,8 +264,13 @@
                 {% if result[3]|length == 1 -%}
                     <h3>   {{result[3][0]}}</h3>
                 {% else -%}
-                    <h3>   {{result[3][0]}} County <br>
-                    (Past 7 Days)</h3>
+                    {% if result[3][0] == 'BAD DATA (Daily Reporting Error)' -%}
+                        <h3>   {{result[3][0]}} <br>
+                        (Past 7 Days)</h3></h3>
+                    {% else -%}
+                        <h3>   {{result[3][0]}} County <br>
+                        (Past 7 Days)</h3>
+                    {% endif %}
                     <table class="styled-table">
                          <thead>
                              <tr>

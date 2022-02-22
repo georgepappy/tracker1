@@ -138,8 +138,6 @@ def index():
                 bad_data = True
 
             # Last-7-day state-level results
-#            if 'BAD DATA' in [indicent_rate_7_day, deaths_7_day, 
-#                              deaths_per_100k_7_day, case_fatality_ratio_7_day]:
             if bad_data:
                 results_2 = ['BAD DATA (Daily Reporting Error)',
                              '-',
@@ -194,8 +192,6 @@ def index():
                 bad_data = True   
 
             # Last-7-day county-level results
-#            if 'BAD DATA' in [indicent_rate_7_day, deaths_7_day, 
-#                              deaths_per_100k_7_day, case_fatality_ratio_7_day]:
             if bad_data:
                 results_4 = ['BAD DATA (Daily Reporting Error)',
                              result_3.Province_State,
